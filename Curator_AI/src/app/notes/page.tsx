@@ -13,14 +13,15 @@ export const metadata: Metadata = {
 }
 
 interface NotesPageProps {
-    searchParams: {
+    searchParams: Promise<{
         search?: string
         view?: "grid" | "list"
-    }
+    }>
 }
 
 export default async function NotesPage({ searchParams }: NotesPageProps) {
     const session = await getServerSession(authOptions)
+    const { search, view } = await searchParams
 
     if (!session?.user) {
         redirect("/login")
@@ -29,8 +30,8 @@ export default async function NotesPage({ searchParams }: NotesPageProps) {
     const notes = await db.note.findMany({
         where: {
             userId: session.user.id,
-            content: searchParams.search
-                ? { contains: searchParams.search }
+            content: search
+                ? { contains: search }
                 : undefined,
         },
         orderBy: {
@@ -51,7 +52,7 @@ export default async function NotesPage({ searchParams }: NotesPageProps) {
                     </p>
                 </div>
                 <NotesToolbar />
-                <NotesList notes={notes} view={searchParams.view || "grid"} />
+                <NotesList notes={notes} view={view || "grid"} />
             </div>
         </Shell>
     )

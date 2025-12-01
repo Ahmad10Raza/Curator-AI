@@ -100,6 +100,9 @@ export function TopicsToolbar() {
                         <SelectItem value="Database">Database</SelectItem>
                     </SelectContent>
                 </Select>
+                <Button variant="outline" onClick={() => router.push("/enrolled-topics")}>
+                    My Stack
+                </Button>
             </div>
         </div>
     )

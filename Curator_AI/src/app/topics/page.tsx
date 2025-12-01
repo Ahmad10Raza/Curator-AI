@@ -10,18 +10,19 @@ export const metadata: Metadata = {
 }
 
 interface TopicsPageProps {
-    searchParams: {
+    searchParams: Promise<{
         search?: string
         difficulty?: string
         category?: string
-    }
+    }>
 }
 
 export default async function TopicsPage({ searchParams }: TopicsPageProps) {
+    const { search, difficulty, category } = await searchParams
     const topics = await getTopics(
-        searchParams.search,
-        searchParams.difficulty,
-        searchParams.category
+        search,
+        difficulty,
+        category
     )
 
     return (

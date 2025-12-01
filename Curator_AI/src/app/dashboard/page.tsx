@@ -11,6 +11,10 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ArrowRight, BookOpen, CheckCircle, Flame, PenTool } from "lucide-react"
 import { Shell } from "@/components/layout/Shell"
+import { ActivityGraph } from "@/components/dashboard/ActivityGraph"
+import { RecentNotes } from "@/components/dashboard/RecentNotes"
+import { CardDescription } from "@/components/ui/card"
+
 
 export const metadata: Metadata = {
     title: "Dashboard",
@@ -46,20 +50,22 @@ export default async function DashboardPage() {
 
                 {/* Overview Widgets */}
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">
-                                Total Topics
-                            </CardTitle>
-                            <BookOpen className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{stats.topicsCount}</div>
-                            <p className="text-xs text-muted-foreground">
-                                in your stack
-                            </p>
-                        </CardContent>
-                    </Card>
+                    <Link href="/enrolled-topics">
+                        <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
+                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                <CardTitle className="text-sm font-medium">
+                                    Total Topics
+                                </CardTitle>
+                                <BookOpen className="h-4 w-4 text-muted-foreground" />
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-2xl font-bold">{stats.topicsCount}</div>
+                                <p className="text-xs text-muted-foreground">
+                                    in your stack
+                                </p>
+                            </CardContent>
+                        </Card>
+                    </Link>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">
@@ -105,8 +111,30 @@ export default async function DashboardPage() {
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                    {/* Continue Learning */}
                     <Card className="col-span-4">
+                        <CardHeader>
+                            <CardTitle>Overview</CardTitle>
+                        </CardHeader>
+                        <CardContent className="pl-2">
+                            <ActivityGraph />
+                        </CardContent>
+                    </Card>
+                    <Card className="col-span-3">
+                        <CardHeader>
+                            <CardTitle>Recent Notes</CardTitle>
+                            <CardDescription>
+                                You made {stats.notesToday} notes today.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <RecentNotes notes={recentNotes} />
+                        </CardContent>
+                    </Card>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                    {/* Continue Learning */}
+                    <Card className="col-span-7">
                         <CardHeader>
                             <CardTitle>Continue Learning</CardTitle>
                         </CardHeader>
@@ -136,34 +164,6 @@ export default async function DashboardPage() {
                                         </Link>
                                     </div>
                                 </div>
-                            )}
-                        </CardContent>
-                    </Card>
-
-                    {/* Recent Notes */}
-                    <Card className="col-span-3">
-                        <CardHeader>
-                            <CardTitle>Recent Notes</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            {recentNotes.length > 0 ? (
-                                <div className="space-y-4">
-                                    {recentNotes.map((note: any) => (
-                                        <div key={note.id} className="space-y-1">
-                                            <div className="flex items-center justify-between">
-                                                <p className="text-sm font-medium leading-none">{note.topic.name}</p>
-                                                <span className="text-xs text-muted-foreground">
-                                                    {new Date(note.createdAt).toLocaleDateString()}
-                                                </span>
-                                            </div>
-                                            <p className="line-clamp-2 text-xs text-muted-foreground">
-                                                {note.content.substring(0, 100)}...
-                                            </p>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="text-sm text-muted-foreground">No notes created yet.</p>
                             )}
                         </CardContent>
                     </Card>

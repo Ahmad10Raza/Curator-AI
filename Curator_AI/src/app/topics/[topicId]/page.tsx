@@ -12,6 +12,7 @@ import { NoteEditor } from "@/components/notes/NoteEditor"
 import { NotesList } from "@/components/notes/NotesList"
 import { ChatPanel } from "@/components/chat/ChatPanel"
 import { db } from "@/server/db"
+import { TopicStatusButton } from "@/components/topics/TopicStatusButton"
 
 interface TopicPageProps {
     params: Promise<{
@@ -40,8 +41,9 @@ export default async function TopicPage({ params }: TopicPageProps) {
 
     // Fetch user topic status
     let userTopicStatus = "NOT_STARTED"
+    let userTopic = null
     if (session?.user) {
-        const userTopic = await db.userTopic.findFirst({
+        userTopic = await db.userTopic.findFirst({
             where: {
                 userId: session.user.id,
                 topicId: topic.id,
@@ -74,7 +76,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
                                 <span className="text-muted-foreground">Status</span>
                                 <Badge variant="outline">{userTopicStatus}</Badge>
                             </div>
-                            {/* Add more progress stats here if available */}
+                            <TopicStatusButton topicId={topic.id} initialStatus={userTopicStatus} />
                         </div>
                     </div>
 

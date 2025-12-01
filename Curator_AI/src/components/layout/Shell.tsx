@@ -1,5 +1,7 @@
 
 
+
+
 interface ShellProps {
     children: React.ReactNode
 }
@@ -7,9 +9,9 @@ interface ShellProps {
 export function Shell({ children }: ShellProps) {
     return (
         <div className="flex min-h-screen flex-col">
-            <main className="flex-1 container py-6">
+            <div className="flex-1 space-y-4">
                 {children}
-            </main>
+            </div>
         </div>
     )
 }
