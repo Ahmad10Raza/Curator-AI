@@ -31,7 +31,7 @@ export default async function NotesPage({ searchParams }: NotesPageProps) {
         where: {
             userId: session.user.id,
             content: search
-                ? { contains: search }
+                ? { contains: search, mode: 'insensitive' }
                 : undefined,
         },
         orderBy: {

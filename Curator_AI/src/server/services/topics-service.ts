@@ -11,8 +11,8 @@ export const getTopics = async (
                 search
                     ? {
                         OR: [
-                            { name: { contains: search } },
-                            { description: { contains: search } },
+                            { name: { contains: search, mode: 'insensitive' } },
+                            { description: { contains: search, mode: 'insensitive' } },
                         ],
                     }
                     : {},
@@ -32,4 +32,24 @@ export const getTopicById = async (id: string) => {
             id,
         },
     })
+}
+
+
+export const getTopicFilters = async () => {
+    const categories = await db.techTopic.findMany({
+        select: { category: true },
+        distinct: ['category'],
+        where: { category: { not: null } }
+    })
+
+    const difficulties = await db.techTopic.findMany({
+        select: { difficulty: true },
+        distinct: ['difficulty'],
+        where: { difficulty: { not: null } }
+    })
+
+    return {
+        categories: categories.map(c => c.category).filter(Boolean) as string[],
+        difficulties: difficulties.map(d => d.difficulty).filter(Boolean) as string[]
+    }
 }

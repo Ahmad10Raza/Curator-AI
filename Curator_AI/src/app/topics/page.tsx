@@ -1,5 +1,5 @@
 import { Metadata } from "next"
-import { getTopics } from "@/server/services/topics-service"
+import { getTopics, getTopicFilters } from "@/server/services/topics-service"
 import { TopicCard } from "@/components/topics/TopicCard"
 import { Shell } from "@/components/layout/Shell"
 import { TopicsToolbar } from "@/components/topics/TopicsToolbar"
@@ -24,6 +24,7 @@ export default async function TopicsPage({ searchParams }: TopicsPageProps) {
         difficulty,
         category
     )
+    const { categories, difficulties } = await getTopicFilters()
 
     return (
         <Shell>
@@ -34,7 +35,7 @@ export default async function TopicsPage({ searchParams }: TopicsPageProps) {
                         Explore our collection of technology topics.
                     </p>
                 </div>
-                <TopicsToolbar />
+                <TopicsToolbar categories={categories} difficulties={difficulties} />
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {topics.map((topic: any) => (
                         <TopicCard key={topic.id} topic={topic} />

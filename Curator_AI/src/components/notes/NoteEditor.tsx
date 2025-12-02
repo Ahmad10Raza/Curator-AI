@@ -3,9 +3,10 @@
 import * as React from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
 import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
+import MDEditor from "@uiw/react-md-editor"
+import { useTheme } from "next-themes"
 
 interface NoteEditorProps {
     topicId: string
@@ -14,7 +15,14 @@ interface NoteEditorProps {
 export function NoteEditor({ topicId }: NoteEditorProps) {
     const [content, setContent] = React.useState("")
     const [isLoading, setIsLoading] = React.useState(false)
+    const [preview, setPreview] = React.useState<"edit" | "preview">("edit")
     const router = useRouter()
+    const { resolvedTheme } = useTheme()
+    const [mounted, setMounted] = React.useState(false)
+
+    React.useEffect(() => {
+        setMounted(true)
+    }, [])
 
     async function onSave() {
         if (!content.trim()) return
@@ -37,6 +45,7 @@ export function NoteEditor({ topicId }: NoteEditorProps) {
             }
 
             setContent("")
+            setPreview("edit")
             router.refresh()
             toast.success("Note saved", {
                 description: "Your note has been saved successfully.",
@@ -84,14 +93,48 @@ export function NoteEditor({ topicId }: NoteEditorProps) {
         }
     }
 
+    if (!mounted) {
+        return (
+            <div className="space-y-4">
+                <div className="flex justify-end mb-2">
+                    <Button variant="ghost" size="sm" disabled className="text-muted-foreground">
+                        Loading Editor...
+                    </Button>
+                </div>
+                <div className="min-h-[200px] border rounded-md bg-muted/50 animate-pulse" />
+            </div>
+        )
+    }
+
     return (
         <div className="space-y-4">
-            <Textarea
-                placeholder="Write your note here... (Markdown supported)"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                className="min-h-[200px]"
-            />
+            <div className="flex justify-end mb-2">
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setPreview(preview === "edit" ? "preview" : "edit")}
+                    className="text-muted-foreground"
+                >
+                    {preview === "edit" ? "Switch to Preview" : "Switch to Edit"}
+                </Button>
+            </div>
+            <div data-color-mode={resolvedTheme === "dark" ? "dark" : "light"}>
+                <MDEditor
+                    value={content}
+                    onChange={(val) => setContent(val || "")}
+                    height={400}
+                    preview={preview}
+                    className="min-h-[200px]"
+                    visibleDragbar={false}
+                    hideToolbar={false}
+                    enableScroll={true}
+                    style={{
+                        backgroundColor: 'transparent',
+                        color: 'inherit',
+                        borderColor: 'hsl(var(--border))'
+                    }}
+                />
+            </div>
             <div className="flex justify-between gap-2">
                 <div className="flex gap-2">
                     <Button variant="outline" size="sm" onClick={() => onEnhance("structure")} disabled={isLoading || !content.trim()}>

@@ -14,7 +14,12 @@ import { Search, X } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useDebounce } from "@/hooks/use-debounce"
 
-export function TopicsToolbar() {
+interface TopicsToolbarProps {
+    categories: string[]
+    difficulties: string[]
+}
+
+export function TopicsToolbar({ categories, difficulties }: TopicsToolbarProps) {
     const router = useRouter()
     const searchParams = useSearchParams()
 
@@ -81,9 +86,11 @@ export function TopicsToolbar() {
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="ALL">All Difficulties</SelectItem>
-                        <SelectItem value="BEGINNER">Beginner</SelectItem>
-                        <SelectItem value="INTERMEDIATE">Intermediate</SelectItem>
-                        <SelectItem value="ADVANCED">Advanced</SelectItem>
+                        {difficulties.map((diff) => (
+                            <SelectItem key={diff} value={diff}>
+                                {diff}
+                            </SelectItem>
+                        ))}
                     </SelectContent>
                 </Select>
                 <Select value={category} onValueChange={setCategory}>
@@ -92,12 +99,11 @@ export function TopicsToolbar() {
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="ALL">All Categories</SelectItem>
-                        <SelectItem value="Frontend">Frontend</SelectItem>
-                        <SelectItem value="Backend">Backend</SelectItem>
-                        <SelectItem value="Fullstack">Fullstack</SelectItem>
-                        <SelectItem value="DevOps">DevOps</SelectItem>
-                        <SelectItem value="AI/ML">AI/ML</SelectItem>
-                        <SelectItem value="Database">Database</SelectItem>
+                        {categories.map((cat) => (
+                            <SelectItem key={cat} value={cat}>
+                                {cat}
+                            </SelectItem>
+                        ))}
                     </SelectContent>
                 </Select>
                 <Button variant="outline" onClick={() => router.push("/enrolled-topics")}>

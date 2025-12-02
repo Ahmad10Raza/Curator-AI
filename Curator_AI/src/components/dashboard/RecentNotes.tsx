@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
+import MDEditor from "@uiw/react-md-editor"
 
 interface RecentNotesProps {
     notes: any[]
@@ -21,9 +22,9 @@ export function RecentNotes({ notes }: RecentNotesProps) {
                                     {new Date(note.createdAt).toLocaleDateString()}
                                 </span>
                             </div>
-                            <p className="line-clamp-2 text-xs text-muted-foreground">
-                                {note.content.substring(0, 100)}...
-                            </p>
+                            <div className="line-clamp-2 text-xs text-muted-foreground pointer-events-none overflow-hidden">
+                                <MDEditor.Markdown source={note.content} style={{ background: 'transparent', color: 'inherit', fontSize: 'inherit' }} />
+                            </div>
                         </div>
                     ))}
                 </div>
