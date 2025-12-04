@@ -27,6 +27,36 @@ export function MainNav({
             label: "Notes",
             active: pathname?.startsWith("/notes"),
         },
+        {
+            href: "/timeline",
+            label: "Timeline",
+            active: pathname?.startsWith("/timeline"),
+        },
+        {
+            href: "/paths",
+            label: "Paths",
+            active: pathname?.startsWith("/paths"),
+        },
+        {
+            href: "/skills",
+            label: "Skills",
+            active: pathname?.startsWith("/skills"),
+        },
+        {
+            href: "/quiz",
+            label: "Quiz",
+            active: pathname?.startsWith("/quiz"),
+        },
+        {
+            href: "/projects",
+            label: "Projects",
+            active: pathname?.startsWith("/projects"),
+        },
+        {
+            href: "/career",
+            label: "Career",
+            active: pathname?.startsWith("/career"),
+        },
     ]
 
     return (

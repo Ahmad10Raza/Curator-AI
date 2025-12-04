@@ -1,4 +1,4 @@
-// This is your Prisma schema file,
+// This is a Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
@@ -53,6 +53,16 @@ model User {
   userTopics    UserTopic[]
   notes         Note[]
   dailyLogs     DailyLog[]
+  dailySummaries DailySummary[]
+  
+  // Phase 2 Relations
+  userPaths     UserPath[]
+  userSkills    UserSkill[]
+  quizResults   QuizResult[]
+  projects      Project[]
+  resumeProfile ResumeProfile?
+  publicPortfolioProfile PublicPortfolioProfile?
+  jobRecommendations JobRecommendation[]
 }
 
 model VerificationToken {
@@ -130,9 +140,195 @@ model DailyLog {
 }
 
 model DailySummary {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String   @db.ObjectId
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date            DateTime
+  summary         String
+  keyLearnings    String[]
+  weakAreas       Json     // { area: string, count: number, details: string }[]
+  suggestions     String[]
+  notesAnalyzed   Int
+  topicsCompleted Int
+  createdAt       DateTime @default(now())
+  
+  @@unique([userId, date])
+  @@map("daily_summaries")
+}
+
+// Phase 2 Models
+
+// 2.1 Structured Learning Paths
+model LearningPath {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  category    String
+  difficulty  String     // BEGINNER, INTERMEDIATE, ADVANCED
+  isPublic    Boolean    @default(false)
+  creatorId   String?    @db.ObjectId // Null for system paths
+  steps       PathStep[]
+  userPaths   UserPath[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model PathStep {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  pathId         String       @db.ObjectId
+  path           LearningPath @relation(fields: [pathId], references: [id], onDelete: Cascade)
+  title          String
+  description    String?
+  order          Int
+  topicId        String?      @db.ObjectId // Optional link to existing topic
+  resources      Json?        // Array of links/resources
+  createdAt      DateTime     @default(now())
+}
+
+model UserPath {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String       @db.ObjectId
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pathId         String       @db.ObjectId
+  path           LearningPath @relation(fields: [pathId], references: [id], onDelete: Cascade)
+  status         String       @default("IN_PROGRESS") // IN_PROGRESS, COMPLETED
+  progress       Int          @default(0)
+  completedSteps String[]     // Array of PathStep IDs
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([userId, pathId])
+}
+
+// 2.2 Skill Graph
+model SkillNode {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  name        String      @unique
+  category    String
+  description String?
+  parentId    String?     @db.ObjectId // For hierarchical grouping
+  edgesFrom   SkillEdge[] @relation("FromNode")
+  edgesTo     SkillEdge[] @relation("ToNode")
+  userSkills  UserSkill[]
+}
+
+model SkillEdge {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  fromNodeId String    @db.ObjectId
+  fromNode   SkillNode @relation("FromNode", fields: [fromNodeId], references: [id])
+  toNodeId   String    @db.ObjectId
+  toNode     SkillNode @relation("ToNode", fields: [toNodeId], references: [id])
+  type       String    // DEPENDENCY, RELATED
+}
+
+model UserSkill {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String    @db.ObjectId
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skillNodeId  String    @db.ObjectId
+  skillNode    SkillNode @relation(fields: [skillNodeId], references: [id])
+  proficiency  Int       @default(0) // 0-100
+  status       String    // LOCKED, UNLOCKED, IN_PROGRESS, MASTERED
+  lastPracticed DateTime?
+  
+  @@unique([userId, skillNodeId])
+}
+
+// 2.3 Quizzes & Flashcards
+model Quiz {
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  topicId     String?        @db.ObjectId
+  questions   QuizQuestion[]
+  results     QuizResult[]
+  createdAt   DateTime       @default(now())
+}
+
+model QuizQuestion {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  quizId      String   @db.ObjectId
+  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  question    String
+  options     String[]
+  correctIdx  Int
+  explanation String?
+}
+
+model QuizResult {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  quizId    String   @db.ObjectId
+  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
   userId    String   @db.ObjectId
-  date      DateTime
-  summary   String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score     Int
+  answers   Json     // Map of questionId -> selectedIdx
   createdAt DateTime @default(now())
+}
+
+// 2.4 Projects & Portfolio
+model Project {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  techStack   String[]
+  githubUrl   String?
+  repoUrl     String?  // Keeping for backward compatibility, can migrate to githubUrl later
+  demoUrl     String?
+  difficulty  String?  // BEGINNER, INTERMEDIATE, ADVANCED
+  status      String   @default("COMPLETED") // IDEA, IN_PROGRESS, COMPLETED
+  isPublic    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  media       ProjectMedia[]
+}
+
+model ProjectMedia {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  projectId String   @db.ObjectId
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  url       String
+  type      String   @default("IMAGE") // IMAGE, VIDEO
+  createdAt DateTime @default(now())
+}
+
+model PublicPortfolioProfile {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @unique @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  username  String   @unique
+  bio       String?
+  tagline   String?
+  showEmail Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// 2.5 Resume & Jobs
+model ResumeProfile {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @unique @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  summary     String?
+  skills      String[]
+  experience  Json?    // Array of experience objects
+  education   Json?    // Array of education objects
+  generatedResume String? // Markdown or HTML content
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model JobRecommendation {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  company     String
+  location    String?
+  matchScore  Int      // 0-100
+  missingSkills String[]
+  applyLink   String?
+  createdAt   DateTime @default(now())
 }

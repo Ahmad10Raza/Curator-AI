@@ -1,14 +1,11 @@
 "use client"
 
 import { Note, TechTopic } from "@prisma/client"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { formatDistanceToNow } from "date-fns"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
-import Link from "next/link"
-import MDEditor from "@uiw/react-md-editor"
 import { useState } from "react"
-import { NoteDialog } from "./NoteDialog"
+import { ChevronDown, ChevronRight } from "lucide-react"
+import { NoteCard } from "./NoteCard"
 
 interface NotesListProps {
     notes: (Note & { topic?: TechTopic })[]
@@ -16,6 +13,8 @@ interface NotesListProps {
 }
 
 export function NotesList({ notes, view = "grid" }: NotesListProps) {
+    const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set())
+
     if (notes.length === 0) {
         return (
             <div className="text-center text-muted-foreground py-8 border border-dashed rounded-md">
@@ -24,45 +23,66 @@ export function NotesList({ notes, view = "grid" }: NotesListProps) {
         )
     }
 
-    const [selectedNote, setSelectedNote] = useState<any>(null)
+    // Group notes by category
+    const notesByCategory = notes.reduce((acc, note) => {
+        const category = note.topic?.category || "Uncategorized"
+        if (!acc[category]) {
+            acc[category] = []
+        }
+        acc[category].push(note)
+        return acc
+    }, {} as Record<string, typeof notes>)
+
+    const toggleCategory = (category: string) => {
+        const newExpanded = new Set(expandedCategories)
+        if (newExpanded.has(category)) {
+            newExpanded.delete(category)
+        } else {
+            newExpanded.add(category)
+        }
+        setExpandedCategories(newExpanded)
+    }
+
+    // Sort categories alphabetically
+    const sortedCategories = Object.keys(notesByCategory).sort()
 
     return (
-        <>
-            <div className={cn(
-                "grid gap-4",
-                view === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"
-            )}>
-                {notes.map((note) => (
-                    <Card
-                        key={note.id}
-                        className="flex flex-col h-full hover:shadow-md transition-shadow cursor-pointer hover:border-primary/50"
-                        onClick={() => setSelectedNote(note)}
-                    >
-                        <CardHeader className="py-3 space-y-1">
-                            <div className="flex justify-between items-start gap-2">
-                                {note.topic && (
-                                    <Badge variant="outline" className="line-clamp-1 max-w-[150px]">
-                                        {note.topic.name}
-                                    </Badge>
-                                )}
-                                <span className="text-xs text-muted-foreground whitespace-nowrap ml-auto">
-                                    {formatDistanceToNow(new Date(note.createdAt), { addSuffix: true })}
-                                </span>
+        <div className="space-y-6">
+            {sortedCategories.map((category) => {
+                const categoryNotes = notesByCategory[category]
+                const isExpanded = expandedCategories.has(category)
+
+                return (
+                    <div key={category} className="space-y-3">
+                        <button
+                            onClick={() => toggleCategory(category)}
+                            className="flex items-center gap-2 text-lg font-semibold hover:text-primary transition-colors w-full"
+                        >
+                            {isExpanded ? (
+                                <ChevronDown className="h-5 w-5" />
+                            ) : (
+                                <ChevronRight className="h-5 w-5" />
+                            )}
+                            <span>{category}</span>
+                            <Badge variant="secondary" className="ml-2">
+                                {categoryNotes.length}
+                            </Badge>
+                        </button>
+
+                        {isExpanded && (
+                            <div className={cn(
+                                "grid gap-4",
+                                view === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"
+                            )}>
+                                {categoryNotes.map((note) => (
+                                    <NoteCard key={note.id} note={note} />
+                                ))}
                             </div>
-                        </CardHeader>
-                        <CardContent className="py-3 pt-0 flex-1 overflow-hidden">
-                            <div className="text-sm text-muted-foreground line-clamp-6 pointer-events-none">
-                                <MDEditor.Markdown source={note.content} style={{ background: 'transparent', color: 'inherit' }} />
-                            </div>
-                        </CardContent>
-                    </Card>
-                ))}
-            </div>
-            <NoteDialog
-                note={selectedNote}
-                open={!!selectedNote}
-                onOpenChange={(open) => !open && setSelectedNote(null)}
-            />
-        </>
+                        )}
+                    </div>
+                )
+            })}
+        </div>
     )
 }
+

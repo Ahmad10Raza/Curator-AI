@@ -19,6 +19,13 @@ export function NotesToolbar() {
 
     useEffect(() => {
         const params = new URLSearchParams(searchParams.toString())
+        const currentSearch = params.get("search") || ""
+        const currentView = params.get("view") || "grid"
+
+        // Only update if values have actually changed
+        if (debouncedSearch === currentSearch && view === currentView) {
+            return
+        }
 
         if (debouncedSearch) {
             params.set("search", debouncedSearch)
@@ -30,7 +37,7 @@ export function NotesToolbar() {
             params.set("view", view)
         }
 
-        router.push(`/notes?${params.toString()}`)
+        router.push(`/notes?${params.toString()}`, { scroll: false })
     }, [debouncedSearch, view, router, searchParams])
 
     return (

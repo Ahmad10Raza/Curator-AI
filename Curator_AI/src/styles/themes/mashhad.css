@@ -1,0 +1,101 @@
+/* Mashhad Theme Styles */
+.theme.mashhad {
+    font-family: "Nunito", "Inter", 'Noto Sans SC';
+    font-size: calc(16px * var(--fontScale));
+    line-height: var(--lineHeightScale);
+    color: var(--textColor, #444);
+}
+
+.theme.mashhad h1,
+.theme.mashhad h2,
+.theme.mashhad h3,
+.theme.mashhad h4,
+.theme.mashhad h5,
+.theme.mashhad h6 {
+    font-family: "Inika", "Inter", 'Noto Sans SC';
+}
+
+.theme.mashhad h1 {
+    font-weight: 800;
+    font-size: calc(2.5rem * var(--fontScale) * var(--headingScale, 1));
+    margin-top: 0;
+    text-align: left;
+    color: var(--headerColor, #222);
+}
+
+.theme.mashhad h2 {
+    display: flex;
+    position: relative;
+    color: var(--headerColor, #222);
+    font-weight: 600;
+    font-size: calc(1.5rem * var(--fontScale) * var(--headingScale, 1));
+    margin-top: 0.5em;
+}
+
+.theme.mashhad h2:after {
+    color: var(--headerColor);
+    align-self: end;
+    content: '';
+    flex-grow: 1;
+    height: 1px;
+    margin-bottom: 1rem;
+    margin-left: 4px;
+}
+
+.theme.mashhad h3 {
+    color: var(--headerColor, #016ef1);
+    margin-top: 0.5rem;
+    font-weight: 600;
+    font-size: calc(1.25rem * var(--fontScale) * var(--headingScale, 1));
+}
+
+.theme.mashhad h3+p {
+    margin-top: .2rem;
+}
+
+.theme.mashhad p {
+    margin-top: .5rem;
+    color: var(--textColor);
+}
+
+.theme.mashhad a {
+    color: var(--linkColor, #222);
+    border-bottom: 1px dashed;
+    text-decoration: none !important;
+}
+
+.theme.mashhad hr {
+    border-top: 1px solid #ddd;
+    margin: 1em 0;
+}
+
+.theme.mashhad strong {
+    color: var(--textColor, #222);
+    font-weight: 600;
+}
+
+.theme.mashhad em {
+    font-style: italic;
+    color: var(--textColor, #444);
+}
+
+.theme.mashhad ul {
+    padding-left: 12px;
+    margin-top: .5em;
+    list-style-type: none;
+}
+
+.theme.mashhad ul li {
+    list-style-type: none;
+    position: relative;
+    color: var(--textColor);
+}
+
+.theme.mashhad ul li:before {
+    color: var(--linkColor, #016ef1);
+    font-family: "Overpass Mono";
+    font-weight: 700;
+    content: "*";
+    left: -12px;
+    position: absolute;
+}

@@ -6,7 +6,7 @@ import { useSession, signOut, signIn } from "next-auth/react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { BarChart3, BookOpen, Home, LayoutDashboard, Settings, StickyNote, LogOut, LogIn, Layers } from "lucide-react"
+import { BarChart3, BookOpen, Home, LayoutDashboard, Settings, StickyNote, LogOut, LogIn, Layers, FileText } from "lucide-react"
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
     collapsed?: boolean
@@ -41,6 +41,11 @@ export function Sidebar({ className, collapsed }: SidebarProps) {
             title: "Summaries",
             href: "/summaries",
             icon: BarChart3,
+        },
+        {
+            title: "Resume",
+            href: "/career/resume",
+            icon: FileText,
         },
     ]
 

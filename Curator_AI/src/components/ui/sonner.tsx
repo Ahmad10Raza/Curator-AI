@@ -17,6 +17,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
 
   useEffect(() => {
     setMounted(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (!mounted) {

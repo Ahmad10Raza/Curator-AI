@@ -1,0 +1,88 @@
+/* Shiraz Theme Styles */
+.theme.shiraz {
+    font-family: "Work Sans", "Inter", 'Noto Sans SC';
+    font-size: calc(16px * var(--fontScale));
+    line-height: var(--lineHeightScale);
+    color: var(--textColor, #222);
+}
+
+.theme.shiraz h1,
+.theme.shiraz h2,
+.theme.shiraz h3,
+.theme.shiraz h4,
+.theme.shiraz h5,
+.theme.shiraz h6 {
+    font-family: "Poppins", "Inter", 'Noto Sans SC';
+}
+
+.theme.shiraz h1 {
+    font-weight: normal;
+    font-size: calc(2.25rem * var(--fontScale) * var(--headingScale, 1));
+    margin-top: 0;
+    text-align: left;
+    color: var(--headerColor, #222);
+}
+
+.theme.shiraz h2 {
+    border-bottom: 1px dashed var(--linkColor, #016ef1);
+    font-weight: 700;
+    font-size: calc(1.5rem * var(--fontScale) * var(--headingScale, 1));
+    margin-top: 0.5em;
+    position: relative;
+    display: inline-block;
+    color: var(--headerColor, #222);
+}
+
+.theme.shiraz h3 {
+    font-size: calc(1.25rem * var(--fontScale) * var(--headingScale, 1));
+    margin-top: 0.5rem;
+    font-weight: 600;
+    color: var(--headerColor, #222);
+}
+
+.theme.shiraz p {
+    margin-top: 0.5rem;
+    color: var(--textColor, #222);
+}
+
+.theme.shiraz a {
+    color: var(--linkColor, #222);
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+.theme.shiraz hr {
+    margin: 1em 0;
+    border: none;
+}
+
+.theme.shiraz strong {
+    font-weight: 500;
+    color: var(--textColor, #222);
+}
+
+.theme.shiraz em {
+    font-style: italic;
+    color: var(--textColor, #222);
+}
+
+.theme.shiraz ul {
+    padding-left: 16px;
+    margin-top: 0.5em;
+    list-style-type: none;
+}
+
+.theme.shiraz ul li {
+    list-style-type: none;
+    position: relative;
+    color: var(--textColor, #222);
+}
+
+.theme.shiraz ul li:before {
+    font-weight: bold;
+    content: '-';
+    left: -16px;
+    position: absolute;
+    margin-right: 0.5em;
+    color: var(--linkColor, #016ef1);
+}

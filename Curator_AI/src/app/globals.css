@@ -1,5 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Noto+Sans:wght@300;400;600;700&family=Ubuntu:wght@300;400;500;700&family=Inter:wght@400;700&family=Nunito:wght@400;700&family=Overpass+Mono:wght@400;700&family=Poppins:wght@400;700&family=Work+Sans:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@400;700&family=Inter:wght@400;700&family=Noto+Sans+SC:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inika:wght@400;700&family=Inter:wght@400;700&family=Noto+Sans+SC:wght@400;700&family=Nunito:wght@400;700&family=Overpass+Mono:wght@400;700&family=Poppins:wght@400;700&family=Work+Sans:wght@400;700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "../styles/print.css";
+@import "../styles/themes/tehran.css";
+@import "../styles/themes/isfahan.css";
+@import "../styles/themes/shiraz.css";
+@import "../styles/themes/mashhad.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -116,7 +124,40 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+:root {
+  --fontName: "Open Sans";
+  --fontScale: 1;
+  --headingScale: 1;
+  --lineHeightScale: 1.5;
+  --xPaddingScale: 20px;
+  --yPaddingScale: 0px;
+  --headerColor: #000;
+  --textColor: #000;
+  --linkColor: #1a73e8;
+}
+
+.previewContainer {
+  font-family: var(--fontName, "Open Sans"), sans-serif;
+  padding: var(--yPaddingScale) var(--xPaddingScale);
+}
+
+/* Custom Scrollbar for WebKit Browsers */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #c0bcbc;
 }

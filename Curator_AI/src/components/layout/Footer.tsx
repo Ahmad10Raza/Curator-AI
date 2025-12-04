@@ -18,7 +18,7 @@ export function Footer() {
                         </a>
                         . The source code is available on{" "}
                         <a
-                            href="#"
+                            href="https://github.com/Ahmad10Raza"
                             target="_blank"
                             rel="noreferrer"
                             className="font-medium underline underline-offset-4"
@@ -29,7 +29,7 @@ export function Footer() {
                     </p>
                 </div>
                 <div className="flex items-center space-x-4">
-                    <Link href="#" className="text-muted-foreground hover:text-foreground">
+                    <Link href="https://github.com/Ahmad10Raza" className="text-muted-foreground hover:text-foreground">
                         <Github className="h-5 w-5" />
                         <span className="sr-only">GitHub</span>
                     </Link>
@@ -37,7 +37,7 @@ export function Footer() {
                         <Twitter className="h-5 w-5" />
                         <span className="sr-only">Twitter</span>
                     </Link>
-                    <Link href="#" className="text-muted-foreground hover:text-foreground">
+                    <Link href="https://www.linkedin.com/in/ahmad10raza" className="text-muted-foreground hover:text-foreground">
                         <Linkedin className="h-5 w-5" />
                         <span className="sr-only">LinkedIn</span>
                     </Link>
