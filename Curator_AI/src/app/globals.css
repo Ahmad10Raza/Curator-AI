@@ -161,3 +161,178 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #c0bcbc;
 }
+
+/* ============================================
+   RESPONSIVE MEDIA QUERIES FOR MOBILE
+   ============================================ */
+
+/* Tablets and below (768px) */
+@media (max-width: 768px) {
+
+  /* Reduce font sizes for better readability */
+  html {
+    font-size: 14px;
+  }
+
+  /* Adjust container padding */
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Stack grid layouts */
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Adjust card spacing */
+  .space-y-6>*+* {
+    margin-top: 1rem;
+  }
+
+  .space-y-8>*+* {
+    margin-top: 1.5rem;
+  }
+
+  /* Make buttons full width on mobile */
+  .mobile-full-width {
+    width: 100%;
+  }
+
+  /* Adjust heading sizes */
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Mobile phones (480px and below) */
+@media (max-width: 480px) {
+  html {
+    font-size: 13px;
+  }
+
+  /* Further reduce padding */
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  /* Adjust preview container for resume */
+  .previewContainer {
+    padding: 10px;
+    font-size: 0.875rem;
+  }
+
+  /* Make tables scrollable */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* Adjust card padding */
+  .card {
+    padding: 0.75rem;
+  }
+
+  /* Stack flex items */
+  .flex {
+    flex-direction: column;
+  }
+
+  .flex.gap-4>*+* {
+    margin-top: 1rem;
+  }
+
+  /* Smaller headings on very small screens */
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+  }
+
+  /* Adjust button sizes */
+  button,
+  .button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  /* Make inputs full width */
+  input,
+  textarea,
+  select {
+    width: 100%;
+  }
+}
+
+/* Landscape mobile (orientation) */
+@media (max-width: 768px) and (orientation: landscape) {
+
+  /* Reduce vertical spacing in landscape */
+  .space-y-6>*+* {
+    margin-top: 0.75rem;
+  }
+
+  .space-y-8>*+* {
+    margin-top: 1rem;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+
+  /* Increase touch target sizes */
+  button,
+  a,
+  input[type="button"],
+  input[type="submit"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Increase spacing for better touch targets */
+  .gap-2 {
+    gap: 0.75rem;
+  }
+
+  .gap-4 {
+    gap: 1rem;
+  }
+}
+
+/* Ensure images are responsive */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent horizontal scroll */
+body {
+  overflow-x: hidden;
+}
+
+/* Make sure modals and dialogs are mobile-friendly */
+@media (max-width: 640px) {
+
+  [role="dialog"],
+  .modal {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    margin: 1rem auto;
+  }
+}

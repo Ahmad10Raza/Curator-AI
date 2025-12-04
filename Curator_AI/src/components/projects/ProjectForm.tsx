@@ -27,7 +27,16 @@ const projectSchema = z.object({
 type ProjectFormValues = z.infer<typeof projectSchema>
 
 interface ProjectFormProps {
-    initialData?: Partial<ProjectFormValues> & { id?: string }
+    initialData?: {
+        id?: string
+        title?: string
+        description?: string
+        techStack?: string
+        githubUrl?: string
+        demoUrl?: string
+        difficulty?: string
+        isPublic?: boolean
+    }
 }
 
 export function ProjectForm({ initialData }: ProjectFormProps) {

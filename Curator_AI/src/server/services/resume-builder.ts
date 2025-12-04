@@ -17,9 +17,10 @@ export async function generateResumeFromLearning(userId: string) {
 
     // Construct a resume object from platform data
     const resumeData = {
-        fullName: profile?.name || "User",
+        fullName: profile?.displayName || "User",
         email: "", // Fetch from User model if needed, but Profile usually has it or User
-        summary: profile?.bio || "A passionate learner building skills in full-stack development.",
+        phone: "",
+        summary: "A passionate learner building skills in full-stack development.",
         skills: userSkills.map(us => us.skillNode.name),
         projects: projects.map(p => ({
             name: p.title,

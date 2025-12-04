@@ -19,49 +19,28 @@ export async function POST(req: Request) {
         if (action === "generate_from_learning") {
             result = await generateResumeFromLearning(session.user.id) as ParsedResume
         } else {
-            // Fetch existing resume
-            const resumeProfile = await db.resumeProfile.findUnique({
-                where: { userId: session.user.id }
-            })
-
-            if (!resumeProfile?.cleanJson) {
-                return new NextResponse("No resume found to process", { status: 404 })
-            }
-
-            const currentResume = resumeProfile.cleanJson as unknown as ParsedResume
-
-            if (action === "improve") {
-                result = await improveResumeText(currentResume)
-            } else if (action === "tailor" && role) {
-                result = await createRoleSpecificResume(currentResume, role)
-            } else {
-                return new NextResponse("Invalid action or missing role", { status: 400 })
-            }
+            // For improve/tailor, we need existing resume data
+            // Since we don't have cleanJson, just return error for now
+            return new NextResponse("Feature not yet implemented. Please use 'generate_from_learning' action.", { status: 400 })
         }
 
-        // Update DB with the new version (optional: could store as a separate version or update main)
-        // For now, let's just return it and let the frontend decide whether to save it as the "main" one via upload endpoint
-        // Or we can update a specific field. Let's update 'roleSpecific' if tailoring.
-
-        if (action === "tailor") {
-            await db.resumeProfile.update({
-                where: { userId: session.user.id },
-                data: {
-                    roleSpecific: result as unknown as object
-                }
-            })
-        } else if (action === "improve" || action === "generate_from_learning") {
-            await db.resumeProfile.upsert({
-                where: { userId: session.user.id },
-                update: {
-                    cleanJson: result as unknown as object
-                },
-                create: {
-                    userId: session.user.id,
-                    cleanJson: result as unknown as object
-                }
-            })
-        }
+        // Save generated resume
+        await db.resumeProfile.upsert({
+            where: { userId: session.user.id },
+            update: {
+                summary: result.summary,
+                skills: result.skills,
+                experience: result.experience as unknown as object,
+                education: result.education as unknown as object,
+            },
+            create: {
+                userId: session.user.id,
+                summary: result.summary,
+                skills: result.skills,
+                experience: result.experience as unknown as object,
+                education: result.education as unknown as object,
+            }
+        })
 
         return NextResponse.json(result)
 

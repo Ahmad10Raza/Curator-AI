@@ -39,6 +39,7 @@ export async function POST(req: Request) {
         await db.jobRecommendation.create({
             data: {
                 resumeId: profile.id,
+                userId: session.user.id,
                 role: analysis.role,
                 readiness: analysis.readinessScore,
                 missingSkills: analysis.missingSkills,

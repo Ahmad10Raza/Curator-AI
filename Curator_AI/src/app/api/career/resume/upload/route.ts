@@ -23,13 +23,17 @@ export async function POST(req: Request) {
         const resumeProfile = await db.resumeProfile.upsert({
             where: { userId: session.user.id },
             update: {
-                rawText: text,
-                cleanJson: parsedData as unknown as object, // Prisma Json type workaround
+                summary: parsedData.summary,
+                skills: parsedData.skills,
+                experience: parsedData.experience as unknown as object,
+                education: parsedData.education as unknown as object,
             },
             create: {
                 userId: session.user.id,
-                rawText: text,
-                cleanJson: parsedData as unknown as object,
+                summary: parsedData.summary,
+                skills: parsedData.skills,
+                experience: parsedData.experience as unknown as object,
+                education: parsedData.education as unknown as object,
             },
         })
 

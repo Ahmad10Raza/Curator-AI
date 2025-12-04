@@ -9,14 +9,14 @@ Add these to your `.env` file:
 OPENAI_API_KEY=your_openai_api_key_here
 
 # Resend API Key (for email delivery)
-RESEND_API_KEY=re_L2kKe4o3_GvCgEimx6C2tAMN8P872yjfd
+RESEND_API_KEY=re_
 
 # Email sender address
 FROM_EMAIL=noreply@yourdomain.com
 
 # Cron secret (for securing the cron endpoint)
 # Generate a random string for this
-CRON_SECRET=Fohz98Tgduzypt+kUs8h5yXoHLeMqm5GAnT0b0xuQ28=
+CRON_SECRET=Fo
 
 # NextAuth URL (should already be set)
 NEXTAUTH_URL=https://your-domain.com

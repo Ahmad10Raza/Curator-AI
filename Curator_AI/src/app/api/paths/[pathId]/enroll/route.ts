@@ -5,8 +5,9 @@ import { enrollUserInPath } from "@/server/services/path-service"
 
 export async function POST(
     req: Request,
-    { params }: { params: { pathId: string } }
+    props: { params: Promise<{ pathId: string }> }
 ) {
+    const params = await props.params;
     const session = await getServerSession(authOptions)
     if (!session?.user) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

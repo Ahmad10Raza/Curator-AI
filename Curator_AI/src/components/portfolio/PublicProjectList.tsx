@@ -4,13 +4,9 @@ import { Button } from "@/components/ui/button"
 import { Github, Globe } from "lucide-react"
 import { Project } from "@prisma/client"
 
-interface ExtendedProject extends Project {
-    githubUrl?: string | null
-    difficulty?: string | null
-}
 
 interface PublicProjectListProps {
-    projects: ExtendedProject[]
+    projects: Project[]
 }
 
 export function PublicProjectList({ projects }: PublicProjectListProps) {

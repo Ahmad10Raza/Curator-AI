@@ -5,8 +5,9 @@ import { getQuizById } from "@/server/services/quiz-service"
 
 export async function GET(
     req: Request,
-    { params }: { params: { quizId: string } }
+    props: { params: Promise<{ quizId: string }> }
 ) {
+    const params = await props.params;
     const session = await getServerSession(authOptions)
     if (!session?.user) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

@@ -4,7 +4,7 @@ import { JobRecommendation } from "@prisma/client"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Briefcase, MapPin, DollarSign, ExternalLink } from "lucide-react"
+import { MapPin, ExternalLink } from "lucide-react"
 
 interface JobCardProps {
     job: JobRecommendation
@@ -16,11 +16,11 @@ export function JobCard({ job }: JobCardProps) {
             <CardHeader className="pb-3">
                 <div className="flex justify-between items-start">
                     <div>
-                        <CardTitle className="text-lg font-semibold">{job.title}</CardTitle>
-                        <p className="text-sm text-muted-foreground font-medium">{job.company}</p>
+                        <CardTitle className="text-lg font-semibold">{job.role}</CardTitle>
+                        <p className="text-sm text-muted-foreground font-medium">{job.company || 'N/A'}</p>
                     </div>
-                    <Badge variant={job.matchScore >= 80 ? "default" : "secondary"}>
-                        {job.matchScore}% Match
+                    <Badge variant={job.readiness >= 80 ? "default" : "secondary"}>
+                        {job.readiness}% Ready
                     </Badge>
                 </div>
             </CardHeader>
@@ -28,28 +28,24 @@ export function JobCard({ job }: JobCardProps) {
                 <div className="flex flex-wrap gap-y-2 gap-x-4 text-sm text-muted-foreground">
                     <div className="flex items-center gap-1">
                         <MapPin className="h-4 w-4" />
-                        {job.location}
-                    </div>
-                    <div className="flex items-center gap-1">
-                        <DollarSign className="h-4 w-4" />
-                        {job.salary}
+                        {job.location || 'Remote'}
                     </div>
                 </div>
 
                 <div className="space-y-2">
-                    <p className="text-xs font-semibold uppercase text-muted-foreground">Requirements</p>
+                    <p className="text-xs font-semibold uppercase text-muted-foreground">Missing Skills</p>
                     <div className="flex flex-wrap gap-2">
-                        {job.requirements.map((req, i) => (
+                        {job.missingSkills.map((skill, i) => (
                             <Badge key={i} variant="outline" className="text-xs font-normal">
-                                {req}
+                                {skill}
                             </Badge>
                         ))}
                     </div>
                 </div>
             </CardContent>
             <CardFooter>
-                <Button className="w-full" variant="outline" asChild>
-                    <a href={job.applyUrl} target="_blank" rel="noopener noreferrer">
+                <Button className="w-full" variant="outline" asChild disabled={!job.applyLink}>
+                    <a href={job.applyLink || '#'} target="_blank" rel="noopener noreferrer">
                         Apply Now <ExternalLink className="ml-2 h-4 w-4" />
                     </a>
                 </Button>
