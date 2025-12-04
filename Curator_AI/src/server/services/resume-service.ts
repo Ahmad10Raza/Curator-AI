@@ -8,22 +8,20 @@ export async function getResumeProfile(userId: string) {
 }
 
 export async function updateResumeProfile(userId: string, data: Partial<{
-    bio: string
+    summary: string
     skills: string[]
     experience: any[]
     education: any[]
-    projects: any[]
 }>) {
     return await db.resumeProfile.upsert({
         where: { userId },
         update: data,
         create: {
             userId,
-            bio: data.bio || "",
+            summary: data.summary || "",
             skills: data.skills || [],
-            experience: data.experience || [],
-            education: data.education || [],
-            projects: data.projects || [],
+            experience: data.experience as unknown as object || {},
+            education: data.education as unknown as object || {},
         },
     })
 }
@@ -31,11 +29,11 @@ export async function updateResumeProfile(userId: string, data: Partial<{
 export async function getJobRecommendations(userId: string) {
     return await db.jobRecommendation.findMany({
         where: { userId },
-        orderBy: { matchScore: "desc" },
+        orderBy: { readiness: "desc" },
     })
 }
 
-export async function saveJobRecommendations(userId: string, jobs: any[]) {
+export async function saveJobRecommendations(userId: string, resumeId: string, jobs: any[]) {
     // Clear old recommendations
     await db.jobRecommendation.deleteMany({ where: { userId } })
 
@@ -43,13 +41,14 @@ export async function saveJobRecommendations(userId: string, jobs: any[]) {
     return await db.jobRecommendation.createMany({
         data: jobs.map(job => ({
             userId,
-            title: job.title,
-            company: job.company,
-            location: job.location,
-            salary: job.salary,
-            matchScore: job.matchScore,
-            requirements: job.requirements,
-            applyUrl: job.applyUrl,
+            resumeId,
+            role: job.role || job.title,
+            company: job.company || null,
+            location: job.location || null,
+            readiness: job.readiness || job.matchScore || 0,
+            missingSkills: job.missingSkills || [],
+            suggestedSteps: job.suggestedSteps as unknown as object || {},
+            applyLink: job.applyLink || job.applyUrl || null,
         })),
     })
 }

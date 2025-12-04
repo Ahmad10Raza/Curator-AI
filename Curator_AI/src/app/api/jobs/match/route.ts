@@ -32,7 +32,7 @@ export async function POST(req: Request) {
         }
 
         const matches = await findJobMatches(profile)
-        await saveJobRecommendations(session.user.id, matches)
+        await saveJobRecommendations(session.user.id, profile.id, matches)
 
         return NextResponse.json(matches)
     } catch (error) {

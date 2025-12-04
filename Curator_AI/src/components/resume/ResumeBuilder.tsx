@@ -18,7 +18,7 @@ export function ResumeBuilder({ initialProfile }: ResumeBuilderProps) {
     const [loading, setLoading] = useState(false)
     const [analyzing, setAnalyzing] = useState(false)
     const [profile, setProfile] = useState({
-        bio: initialProfile?.bio || "",
+        summary: initialProfile?.summary || "",
         skills: initialProfile?.skills.join(", ") || "",
     })
     const [analysis, setAnalysis] = useState<any>(null)
@@ -30,7 +30,7 @@ export function ResumeBuilder({ initialProfile }: ResumeBuilderProps) {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    bio: profile.bio,
+                    summary: profile.summary,
                     skills: profile.skills.split(",").map(s => s.trim()).filter(Boolean),
                 }),
             })
@@ -72,13 +72,13 @@ export function ResumeBuilder({ initialProfile }: ResumeBuilderProps) {
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="space-y-2">
-                        <Label htmlFor="bio">Professional Bio</Label>
+                        <Label htmlFor="summary">Professional Summary</Label>
                         <Textarea
-                            id="bio"
+                            id="summary"
                             placeholder="Brief summary of your experience and goals..."
                             className="min-h-[150px]"
-                            value={profile.bio}
-                            onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
+                            value={profile.summary}
+                            onChange={(e) => setProfile({ ...profile, summary: e.target.value })}
                         />
                     </div>
                     <div className="space-y-2">

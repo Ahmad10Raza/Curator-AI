@@ -20,7 +20,7 @@ interface WeakArea {
 
 export function SummaryCard({ summary }: SummaryCardProps) {
     const [isExpanded, setIsExpanded] = useState(false)
-    const weakAreas = summary.weakAreas as WeakArea[]
+    const weakAreas = summary.weakAreas as unknown as WeakArea[]
 
     return (
         <Card className="hover:shadow-md transition-shadow">

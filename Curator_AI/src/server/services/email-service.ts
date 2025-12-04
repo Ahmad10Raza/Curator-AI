@@ -15,7 +15,7 @@ export async function sendDailySummaryEmail(
     summary: DailySummary
 ) {
     try {
-        const weakAreas = summary.weakAreas as WeakArea[]
+        const weakAreas = summary.weakAreas as unknown as WeakArea[]
 
         const htmlContent = `
 <!DOCTYPE html>

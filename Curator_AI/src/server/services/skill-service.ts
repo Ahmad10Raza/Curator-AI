@@ -153,7 +153,7 @@ export async function initializeSkillGraph() {
         { name: "API", category: "Backend", description: "Application Programming Interface" },
     ]
 
-    const createdNodes = []
+    const createdNodes: any[] = []
     for (const node of nodes) {
         const created = await db.skillNode.create({ data: node })
         createdNodes.push(created)

@@ -21,7 +21,7 @@ const projectSchema = z.object({
     githubUrl: z.string().url("Invalid URL").optional().or(z.literal("")),
     demoUrl: z.string().url("Invalid URL").optional().or(z.literal("")),
     difficulty: z.string().optional(),
-    isPublic: z.boolean().default(true),
+    isPublic: z.boolean().optional(),
 })
 
 type ProjectFormValues = z.infer<typeof projectSchema>
@@ -63,6 +63,7 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
             const payload = {
                 ...data,
                 techStack: data.techStack.split(",").map(t => t.trim()).filter(Boolean),
+                isPublic: data.isPublic ?? true, // Default to true if not provided
             }
 
             const url = initialData?.id

@@ -180,7 +180,7 @@ async function saveSummary(
         update: {
             summary: summaryData.summary,
             keyLearnings: summaryData.keyLearnings,
-            weakAreas: summaryData.weakAreas,
+            weakAreas: summaryData.weakAreas as unknown as object,
             suggestions: summaryData.suggestions,
             notesAnalyzed: activityData.totalNotes,
             topicsCompleted: activityData.totalTopicsCompleted,
@@ -190,7 +190,7 @@ async function saveSummary(
             date: summaryDate,
             summary: summaryData.summary,
             keyLearnings: summaryData.keyLearnings,
-            weakAreas: summaryData.weakAreas,
+            weakAreas: summaryData.weakAreas as unknown as object,
             suggestions: summaryData.suggestions,
             notesAnalyzed: activityData.totalNotes,
             topicsCompleted: activityData.totalTopicsCompleted,
